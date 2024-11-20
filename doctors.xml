@@ -1,0 +1,33 @@
+<doctors>
+    <doctor>
+        <ID>1</ID>
+        <name>Dr. Smith</name>
+        <speciality>Cardiology</speciality>
+        <availability>Monday, Wednesday, Friday</availability>
+    </doctor>
+    <doctor>
+        <ID>2</ID>
+        <name>Dr. Johnson</name>
+        <speciality>Neurology</speciality>
+        <availability>Tuesday, Thursday</availability>
+    </doctor>
+    <doctor>
+        <ID>3</ID>
+        <name>Dr. Doe</name>
+        <speciality>Pathology</speciality>
+        <availability>Monday, Thursday</availability>
+    </doctor>
+    <doctor>
+        <ID>4</ID>
+        <name>Dr. House</name>
+        <speciality>Pathology</speciality>
+        <availability>Tuesday, Friday</availability>
+    </doctor>
+     <doctor>
+        <ID>5</ID>
+        <name>Dr. Gray</name>
+        <speciality>Neurology</speciality>
+        <availability>Tuesday, Friday</availability>
+    </doctor>
+    
+</doctors>
