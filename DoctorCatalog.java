@@ -16,6 +16,11 @@ public class DoctorCatalog {
         doctors.add(doctor);
     }
 
+    // overload addDoctor for easy use e.g add a doctor in menu
+    public void addDoctor(Doctor doctor) {
+        doctors.add(doctor);
+    }
+
 
     // Retrieve the list of doctors
     public List<Doctor> getDoctors() {
