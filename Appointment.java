@@ -1,103 +1,129 @@
-//import jakarta.xml.bind.annotation.XmlElement;
-//import jakarta.xml.bind.annotation.XmlRootElement;
-//import jakarta.xml.bind.annotation.XmlType;
 import java.time.LocalDateTime;
-
-//@XmlRootElement(name = "appointment")
-//@XmlType(propOrder = {"appointmentId", "patientName", "doctorName", "startTime", "durationInMinutes", "status", "notes"})
-
+import java.util.List;
 
 public class Appointment {
-    private String appointmentId; 
-    private String patientName; 
-    private String doctorName; 
-    private LocalDateTime startTime; //Ώρα Έναρξης
-    private int durationInMinutes; 
-    private String status; // (π.χ active, canceled, completed)
-    private String notes; 
+    private Doctor doctor;
+    private String specialty;
+    private Patient patient;
+    private LocalDayTime dateTime;
+    private int duration;
+    private String appointmentType;
+    private String labRequirements;
 
-    public Appointment(String appointmentId, String patientName, String doctorName,
-            LocalDateTime startTime, int durationInMinutes, String status, String notes) {
-        this.appointmentId = appointmentId;
-        this.patientName = patientName;
-        this.doctorName = doctorName;
-        this.startTime = startTime;
-        this.durationInMinutes = durationInMinutes;
-        this.status = status;
-        this.notes = notes;
+    public Appointment(Doctor doctor, String specialty, Patient patient, LocalDayTime dateTime, int duration, String appointmentType, String labRequirements) {
+        this.doctor = doctor;
+        this.specialty = specialty;
+        this.patient = patient;
+        this.dateTime = dateTime;
+        this.duration = duration;
+        this.appointmentType = appointmentType;
+        this.labRequirements = labRequirements;
     }
-    //@XmlElement
-    public String getAppointmentId() {
-        return appointmentId;
-    }
-    
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-    //@XmlElement
-    public String getPatientName() {
-        return patientName;
-    }
-    
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-    //@XmlElement
-    public String getDoctorName() {
-        return doctorName;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        this.specialty = doctor.getSpecialty();
     }
 
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
-    //@XmlElement
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-    //@XmlElement
-    public int getDurationInMinutes() {
-        return durationInMinutes;
+    public String getSpecialty() {
+        return specialty;
     }
 
-    public void setDurationInMinutes(int durationInMinutes) {
-        this.durationInMinutes = durationInMinutes;
-    }
-   // @XmlElement
-    public String getStatus() {
-        return status;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-   // @XmlElement
-    public String getNotes() {
-        return notes;
+    public Patient getPatient() {
+        retutn patient;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
-   // @XmlElement
-    public LocalDateTime getEndTime() {
-        return startTime.plusMinutes(durationInMinutes);
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setAppointmentType(String appointmentType) {
+        this.appointmentType = appointmentType;
+    }
+
+    public String getAppointmentType() {
+        return appointmentType;
+    }
+
+    public void setLabRequirements(String labRequirements) {
+        this.labRequirements = labRequirements;
+    }
+
+    public String getLabRequirements() {
+        return labRequirements;
+    }
+
+    public boolean conflictAppoint(Appointment otherAppointment) {
+        LocalDateTime thisEndTime = this.dateTime.plusMinutes(this.duration);
+        LocalDateTime otherEndTime = other.getDateTime().plusMinutes(other.getDuration());
+        return this.dateTime.isBefore(otherEndTime) && other.getDateTime().isBefore(thisEndTime);
+    }
+
+    public boolean isWithinDocAvailability() {
+        for (TimeSlot slot : doctor.getAvailability()) {
+            LocalDateTime endTime = this.dateTime.plusMinutes(this.duration);
+            if (!this.dateTime.isBefore(slot.getStartTime()) && !endTime.isAfter(slot.getEndTime())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public String toString() {
         return "Appointment{" +
-                "appointmentId='" + appointmentId + 
-                ", patientName='" + patientName + 
-                ", doctorName='" + doctorName + 
-                ", startTime=" + startTime +
-                ", durationInMinutes=" + durationInMinutes +
-                ", status='" + status +
-                ", notes='" + notes + 
+                "doctor=" + doctor.getName() +
+                ", specialty='" + specialty + 
+                ", patient=" + patient.getName() +
+                ", dateTime=" + dateTime +
+                ", duration=" + duration + "minutes" +
+                ", appointmentType='" + appointmentType + 
+                ", LabRequirements='" + labRequirements +
                 '}';
+    }                
+}
+
+public class TimeSlot {
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    public TimeSlot(LocalDateTime startTime, LocalDateTime endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 }
