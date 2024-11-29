@@ -1,22 +1,24 @@
+import java.util.List;
+
 public class Doctor {
 
-    private int ID;
+    private String ID;
 
     private String name;
     private String specialty;
     private List<String> availability;
 
-    public Doctor(int ID, String name, String specialty, List<String> availability) {
+    public Doctor(String ID, String name, String specialty, List<String> availability) {
         this.ID = ID;
         this.name = name;
         this.specialty = specialty;
         this.availability = availability;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
