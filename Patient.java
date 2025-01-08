@@ -1,69 +1,63 @@
-import java.util.List;
-
 public class Patient {
-     
-    private String Firstname;
-    private String Lastname;
-    private int ID;
-    private String Phonenumber;
-    private List<String> Preferences;
+    private int id; // Χρησιμοποιείται μόνο όταν απαιτείται
+    private String name;
+    private String phone;
+    private String address;
+    private String email;
+    private String username;
+    private String password;
 
-    public Patient(String Firstname, String Lastname, int ID, String Phonenumber, List<String> Preferences){
-        this.Firstname = Firstname;
-        this.Lastname = Lastname;
-        this.ID = ID;
-        this.Phonenumber = Phonenumber;
-        this.Preferences = Preferences;
-    }
-
-    public void setFirstname(String Firstname){
-        this.Firstname = Firstname;
-    }
-
-    public String getFirstname(){
-        return Firstname;
+    // Constructor για νέα εγγραφή (χωρίς ID)
+    public Patient(String name, String phone, String address, String email, String username, String password) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
     
-    public void setLastname(String Lastname){
-        this.Lastname = Lastname;
+    // Constructor για αντικείμενα που έχουν ID 
+    public Patient(int id, String name, String phone, String address, String email, String username, String password) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 
-    public String getLastname(){
-        return Lastname;
-    }
-    
-    public void setID(int ID){
-        this.ID = ID;
+    // Getters και Setters
+    public int getId() {
+        return id;
     }
 
-    public int getID(){
-        return ID;
-    }
-     
-    public void setPhonenumber(String Phonenumber){
-        this.Phonenumber = Phonenumber;
+    public String getName() {
+        return name;
     }
 
-    public String getPhonenumber(){
-        return Phonenumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPreferences(List<String> Preferences){
-        this.Preferences = Preferences;
+    public String getAddress() {
+        return address;
     }
 
-    public List<String> getPreferences(){
-        return Preferences;
+    public String getEmail() {
+        return email;
     }
 
-    @Override
-    public String toString(){
-        return "Patient" +
-               "firstName='" + Firstname +
-               ", lastName='" + Lastname + 
-               ", idNumber='" + ID + 
-               ", phoneNumber='" + Phonenumber +
-               ", preferences='" + Preferences +
-               " ";
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
