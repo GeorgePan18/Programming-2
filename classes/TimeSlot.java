@@ -10,7 +10,8 @@ public class Appointment {
     private String appointmentType;
     private String labRequirements;
 
-    public Appointment(Doctor doctor, String specialty, Patient patient, LocalDayTime dateTime, int duration, String appointmentType, String labRequirements) {
+    public Appointment(Doctor doctor, String specialty, Patient patient, LocalDayTime dateTime, int duration,
+            String appointmentType, String labRequirements) {
         this.doctor = doctor;
         this.specialty = specialty;
         this.patient = patient;
@@ -19,6 +20,7 @@ public class Appointment {
         this.appointmentType = appointmentType;
         this.labRequirements = labRequirements;
     }
+
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
         this.specialty = doctor.getSpecialty();
@@ -92,14 +94,14 @@ public class Appointment {
     public String toString() {
         return "Appointment{" +
                 "doctor=" + doctor.getName() +
-                ", specialty='" + specialty + 
+                ", specialty='" + specialty +
                 ", patient=" + patient.getName() +
                 ", dateTime=" + dateTime +
                 ", duration=" + duration + "minutes" +
-                ", appointmentType='" + appointmentType + 
+                ", appointmentType='" + appointmentType +
                 ", LabRequirements='" + labRequirements +
                 '}';
-    }                
+    }
 }
 
 public class TimeSlot {
