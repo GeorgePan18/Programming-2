@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- Δηλώνει την έκδοση του μοντέλου POM και τα namespaces. -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- Ορίζει την έκδοση του μοντέλου Project Object Model (POM) που χρησιμοποιείται. -->
+
+    <groupId>com.mycompany</groupId>
+    <!-- Δηλώνει το μοναδικό αναγνωριστικό της ομάδας, που συχνά ακολουθεί το στυλ ενός domain name. -->
+
+    <artifactId>HealthSync</artifactId>
+    <!-- Δηλώνει το αναγνωριστικό του έργου (project). -->
+
+    <version>1.0-SNAPSHOT</version>
+    <!-- Δηλώνει την έκδοση του έργου. Το `SNAPSHOT` δείχνει ότι είναι μια έκδοση υπό ανάπτυξη. -->
+
+    <packaging>jar</packaging>
+    <!-- Ορίζει τον τύπο του παραγόμενου αρχείου. Εδώ είναι ένα JAR αρχείο. -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Ορίζει την κωδικοποίηση των πηγών σε UTF-8. -->
+
+        <maven.compiler.source>23</maven.compiler.source>
+        <maven.compiler.target>23</maven.compiler.target>
+        <!-- Ορίζει την έκδοση Java που χρησιμοποιείται για τη μεταγλώττιση (Java 22). -->
+
+        <exec.mainClass>com.mycompany.healthsync.HealthSync</exec.mainClass>
+        <!-- Ορίζει την κύρια κλάση που θα εκτελεστεί από την εφαρμογή. -->
+    </properties>
+
+    <dependencies>
+        <!-- Δηλώνει τις εξαρτήσεις του έργου. -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+            <!-- Προσθέτει τον σύνδεσμο (connector) της MySQL για επικοινωνία με τη βάση δεδομένων. -->
+        </dependency>
+
+        <dependency>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-api</artifactId>
+           <version>5.8.2</version>
+           <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-engine</artifactId>
+           <version>5.8.2</version>
+           <scope>test</scope>
+        </dependency>
+
+         <!-- H2 Database (for in-memory testing) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <!-- Ορίζει τις ρυθμίσεις κατασκευής του έργου. -->
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <!-- Δηλώνει την έκδοση του Maven Compiler Plugin. -->
+
+                <configuration>
+                    <source>23</source>
+                    <target>23</target>
+                    <!-- Ορίζει την έκδοση Java για τη μεταγλώττιση και τον στόχο. -->
+                </configuration>
+            </plugin>
+
+            <!-- Maven Exec Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <!-- Δηλώνει την έκδοση του Maven Exec Plugin. -->
+
+                <configuration>
+                    <exec.mainClass>com.mycompany.healthsync.HealthSync</exec.mainClass>
+                    <!-- Δηλώνει την κύρια κλάση που θα εκτελεστεί κατά την εκκίνηση. -->
+                </configuration>
+            </plugin>
+            <!-- Maven Surefire Plugin for running tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+
+            <!-- Maven Shade Plugin for creating a fat JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.mycompany.healthsync.HealthSync</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <name>HealthSync</name>
+    <!-- Δηλώνει το όνομα του έργου. -->
+</project>
