@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <!-- Στοιχεία Project -->
-  <groupId>dreamteam</groupId>
-  <artifactId>clinic-scheduler</artifactId>
-  <version>1.0-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--  Δηλώνει την έκδοση του μοντέλου POM και τα namespaces.  -->
+<modelVersion>4.0.0</modelVersion>
+<!--  Ορίζει την έκδοση του μοντέλου Project Object Model (POM) που χρησιμοποιείται.  -->
+<groupId>com.mycompany</groupId>
+<!--  Δηλώνει το μοναδικό αναγνωριστικό της ομάδας, που συχνά ακολουθεί το στυλ ενός domain name.  -->
+<artifactId>HealthSync</artifactId>
+<!--  Δηλώνει το αναγνωριστικό του έργου (project).  -->
+<version>1.0-SNAPSHOT</version>
+<!--  Δηλώνει την έκδοση του έργου. Το `SNAPSHOT` δείχνει ότι είναι μια έκδοση υπό ανάπτυξη.  -->
+<packaging>jar</packaging>
+<!--  Ορίζει τον τύπο του παραγόμενου αρχείου. Εδώ είναι ένα JAR αρχείο.  -->
 
   <name>clinic-scheduler</name>
   <description>Appointment scheduler for clinic</description>
