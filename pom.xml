@@ -85,6 +85,12 @@
             <!--  Δηλώνει την κύρια κλάση που θα εκτελεστεί κατά την εκκίνηση.  -->
           </configuration>
       </plugin>
+      <!--  Maven Surefire Plugin for running tests  -->
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M5</version>
+      </plugin>
     </plugins>
   </build>
 </project>
