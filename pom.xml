@@ -13,7 +13,7 @@
 <packaging>jar</packaging>
 <!--  Ορίζει τον τύπο του παραγόμενου αρχείου. Εδώ είναι ένα JAR αρχείο.  -->
 
-  <name>clinic-scheduler</name>
+  <name>HealthSync</name>
   <description>Appointment scheduler for clinic</description>
 
   <!-- Ρυθμίσεις Maven -->
