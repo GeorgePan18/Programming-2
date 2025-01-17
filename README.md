@@ -298,24 +298,26 @@
   ## Ρύθμιση του MySQL Server
    ### Ο χρήστης πρέπει να:
 
-    - Εγκαταστήσει τον MySQL Server και το MySQL Workbench.
-    - Δημιουργήσει έναν χρήστη (π.χ., root) με τον ίδιο κωδικό που έχεις ορίσει στον DatabaseManager.java. Αν ο κωδικός διαφέρει,     θα πρέπει να τροποποιηθεί η γραμμή σύνδεσης στη μέθοδο getConnection().
+  - Εγκαταστήσει τον MySQL Server και το MySQL Workbench.
+    - Δημιουργήσει έναν χρήστη (π.χ., root) με τον ίδιο κωδικό που έχει οριστεί στον DatabaseManager.java.
+  
   ## Δημιουργία της Βάσης Δεδομένων
    ### Ο χρήστης πρέπει να:
 
    - Συνδεθεί στον MySQL Server μέσω του Workbench ή του command line.
-   - Εκτελέσει τις εντολές:
+   - Εκτελέσει τις εντολές (Στο workbench):
      
      sql
+
     - CREATE DATABASE HealthSyncDB;
     - USE HealthSyncDB;
 
 Αν ο κωδικός πρόσβασης ή ο χρήστης MySQL του άλλου χρήστη είναι διαφορετικός, θα πρέπει να τροποποιήσει το αρχείο DatabaseManager.java για να ταιριάζει με τα στοιχεία του. Παράδειγμα:
 
   java
-    String url = "jdbc:mysql://localhost:3306/HealthSyncDB";
-    String user = "root"; // Αντί για 'root', βάλτε username σας
-    String password = "Nick2004"; // Αντί για 'Nick2004', βάλτε τον κωδικό σας
+    - String url = "jdbc:mysql://localhost:3306/HealthSyncDB";
+    - String user = "root"; // Αντί για 'root', βάλτε username σας
+    - String password = "Nick2004"; // Αντί για 'Nick2004', βάλτε τον κωδικό σας
 
 Όταν η εφαρμογή εκκινήσει, θα δημιουργήσει αυτόματα τους πίνακες στη βάση δεδομένων.
 ---
@@ -414,4 +416,3 @@ java -jar target/HealthSync-1.0-SNAPSHOT-shaded.jar
 
 # UML DIAGRAM
 [View UML Diagram](https://drive.google.com/file/d/1JsVAf4zzTBa1xt9onBuABBI-qdew-vko/view?usp=sharing) 
-
