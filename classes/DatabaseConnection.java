@@ -4,9 +4,9 @@ import java.sql.SQLException;
  
 public class DatabaseConnection {
     // Database URL, username, and password
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/clinicscheduling?serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/HealthSyncDB";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Programmatismos2!";
+    private static final String PASSWORD = "Nick2004";
  
     public static void main(String[] args) {
         Connection connection = null;
