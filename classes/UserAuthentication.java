@@ -15,7 +15,6 @@ public class UserAuthentication {
                 statement.setString(2, password);
                 ResultSet resultSet = statement.executeQuery();
 
-                // Αν βρεθεί το αποτέλεσμα, ο χρήστης είναι αυθεντικοποιημένος
                 if (resultSet.next()) {
                     return true;
                 }
