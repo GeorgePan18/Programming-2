@@ -36,8 +36,7 @@
   <!--  Προσθέτει τον σύνδεσμο (connector) της MySQL για επικοινωνία με τη βάση δεδομένων.  -->
 </dependency>
 
-
-    <!-- JUnit for Testing -->
+<!-- JUnit for Testing -->
 <dependency>
   <groupId>org.junit.jupiter</groupId>
   <artifactId>junit-jupiter-api</artifactId>
@@ -70,9 +69,20 @@
           <version>3.8.1</version>
           <!--  Δηλώνει την έκδοση του Maven Compiler Plugin.  -->
           <configuration>
-          <source>23</source>
-          <target>23</target>
-          <!--  Ορίζει την έκδοση Java για τη μεταγλώττιση και τον στόχο.  -->
+            <source>23</source>
+            <target>23</target>
+            <!--  Ορίζει την έκδοση Java για τη μεταγλώττιση και τον στόχο.  -->
+          </configuration>
+      </plugin>
+      <!--  Maven Exec Plugin  -->
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.0.0</version>
+          <!--  Δηλώνει την έκδοση του Maven Exec Plugin.  -->
+          <configuration>
+            <exec.mainClass>com.mycompany.healthsync.HealthSync</exec.mainClass>
+            <!--  Δηλώνει την κύρια κλάση που θα εκτελεστεί κατά την εκκίνηση.  -->
           </configuration>
       </plugin>
     </plugins>
