@@ -75,22 +75,6 @@ public class Appointment {
 
 
 
-    public boolean conflictAppoint(Appointment otherAppointment) {
-        LocalDateTime thisEndTime = this.dateTime.plusMinutes(this.duration);
-        LocalDateTime otherEndTime = other.getDateTime().plusMinutes(other.getDuration());
-        return this.dateTime.isBefore(otherEndTime) && other.getDateTime().isBefore(thisEndTime);
-    }
-
-    public boolean isWithinDocAvailability() {
-        for (TimeSlot slot : doctor.getAvailability()) {
-            LocalDateTime endTime = this.dateTime.plusMinutes(this.duration);
-            if (!this.dateTime.isBefore(slot.getStartTime()) && !endTime.isAfter(slot.getEndTime())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public String toString() {
         return "Appointment{" +
