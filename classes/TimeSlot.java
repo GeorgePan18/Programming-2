@@ -66,13 +66,14 @@ public class Appointment {
         return appointmentType;
     }
 
+    public String getLabRequirements() {
+    return labRequirements;
+    }
     public void setLabRequirements(String labRequirements) {
         this.labRequirements = labRequirements;
     }
 
-    public String getLabRequirements() {
-        return labRequirements;
-    }
+
 
     public boolean conflictAppoint(Appointment otherAppointment) {
         LocalDateTime thisEndTime = this.dateTime.plusMinutes(this.duration);
