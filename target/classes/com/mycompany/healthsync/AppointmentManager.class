@@ -1,0 +1,653 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.mycompany.healthsync;
+
+import java.awt.Component;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+
+public class AppointmentManager {
+   public AppointmentManager() {
+   }
+
+   public static void addAppointment(String var0, String var1, String var2, int var3) throws SQLException {
+      try {
+         Connection var4 = DatabaseManager.getConnection();
+
+         label115: {
+            label116: {
+               label117: {
+                  label118: {
+                     try {
+                        if (isWeekend(var1)) {
+                           JOptionPane.showMessageDialog((Component)null, "\u0397 \u03b7\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1 \u03c0\u03bf\u03c5 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b1\u03c4\u03b5 \u03b5\u03af\u03bd\u03b1\u03b9 \u03a3\u03b1\u03b2\u03b2\u03b1\u03c4\u03bf\u03ba\u03cd\u03c1\u03b9\u03b1\u03ba\u03bf. \u03a0\u03b1\u03c1\u03b1\u03ba\u03b1\u03bb\u03ce \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03c4\u03b5 \u03ba\u03b1\u03b8\u03b7\u03bc\u03b5\u03c1\u03b9\u03bd\u03ae.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+                           suggestAlternativeTimesFromDB(var4, var0, var1, var2, var3);
+                           break label118;
+                        }
+
+                        if (isValidTimeFormat(var2) && isValidTimeRange(var2)) {
+                           if (isTimeInPast(var1, var2)) {
+                              JOptionPane.showMessageDialog((Component)null, "\u0397 \u03ce\u03c1\u03b1 \u03c0\u03bf\u03c5 \u03b4\u03ce\u03c3\u03b1\u03c4\u03b5 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c3\u03c4\u03bf \u03c0\u03b1\u03c1\u03b5\u03bb\u03b8\u03cc\u03bd.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+                              suggestAlternativeTimesFromDB(var4, var0, var1, var2, var3);
+                              break label117;
+                           }
+
+                           if (!isAppointmentSlotAvailable(var4, var1, var2, var0)) {
+                              JOptionPane.showMessageDialog((Component)null, "\u0397 \u03ce\u03c1\u03b1 " + var2 + " \u03c4\u03b7\u03c2 \u03b7\u03bc\u03ad\u03c1\u03b1\u03c2 " + var1 + " \u03b5\u03af\u03bd\u03b1\u03b9 \u03ae\u03b4\u03b7 \u03ba\u03bb\u03b5\u03b9\u03c3\u03bc\u03ad\u03bd\u03b7 \u03b3\u03b9\u03b1 \u03c4\u03b7\u03bd \u03b5\u03b9\u03b4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1 " + var0 + ".", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+                              suggestAlternativeTimesFromDB(var4, var0, var1, var2, var3);
+                              break label116;
+                           }
+
+                           int var5 = getLeastBusyDoctorFromDB(var4, var0, var1, var2);
+                           if (var5 != -1 && isDoctorAvailable(var4, var5, var1, var2)) {
+                              String var6 = "INSERT INTO appointments (user_id, doctor_id, date, time)\nVALUES (?, ?, ?, ?)\n";
+                              PreparedStatement var7 = var4.prepareStatement(var6);
+
+                              try {
+                                 var7.setInt(1, var3);
+                                 var7.setInt(2, var5);
+                                 var7.setString(3, var1);
+                                 var7.setString(4, var2);
+                                 var7.executeUpdate();
+                                 JOptionPane.showMessageDialog((Component)null, "\u03a4\u03bf \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd \u03c0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03af\u03c3\u03c4\u03b7\u03ba\u03b5 \u03bc\u03b5 \u03c4\u03bf\u03bd \u03b3\u03b9\u03b1\u03c4\u03c1\u03cc \u03bc\u03b5 ID: " + var5 + "!", "\u0395\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1", 1);
+                              } catch (Throwable var12) {
+                                 if (var7 != null) {
+                                    try {
+                                       var7.close();
+                                    } catch (Throwable var11) {
+                                       var12.addSuppressed(var11);
+                                    }
+                                 }
+
+                                 throw var12;
+                              }
+
+                              if (var7 != null) {
+                                 var7.close();
+                              }
+                              break label115;
+                           }
+
+                           suggestAlternativeTimesFromDB(var4, var0, var1, var2, var3);
+                           break label115;
+                        }
+
+                        JOptionPane.showMessageDialog((Component)null, "\u0397 \u03ba\u03bb\u03b9\u03bd\u03b9\u03ba\u03ae \u03b4\u03b5\u03bd \u03bb\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03b5\u03af \u03c4\u03b7\u03bd \u03ce\u03c1\u03b1 \u03c0\u03bf\u03c5 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b1\u03c4\u03b5. \u0397 \u03ce\u03c1\u03b5\u03c2 \u03bb\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03af\u03b1\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 09:00 \u03bc\u03b5 17:00.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+                        suggestAlternativeTimesFromDB(var4, var0, var1, var2, var3);
+                     } catch (Throwable var13) {
+                        if (var4 != null) {
+                           try {
+                              var4.close();
+                           } catch (Throwable var10) {
+                              var13.addSuppressed(var10);
+                           }
+                        }
+
+                        throw var13;
+                     }
+
+                     if (var4 != null) {
+                        var4.close();
+                     }
+
+                     return;
+                  }
+
+                  if (var4 != null) {
+                     var4.close();
+                  }
+
+                  return;
+               }
+
+               if (var4 != null) {
+                  var4.close();
+               }
+
+               return;
+            }
+
+            if (var4 != null) {
+               var4.close();
+            }
+
+            return;
+         }
+
+         if (var4 != null) {
+            var4.close();
+         }
+      } catch (SQLException var14) {
+         JOptionPane.showMessageDialog((Component)null, "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1 \u03ba\u03b1\u03c4\u03ac \u03c4\u03bf\u03bd \u03c0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03cc \u03c4\u03bf\u03c5 \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd: " + var14.getMessage(), "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         var14.printStackTrace();
+      }
+
+   }
+
+   private static boolean isWeekend(String var0) {
+      DateTimeFormatter var1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      LocalDate var2 = LocalDate.parse(var0, var1);
+      DayOfWeek var3 = var2.getDayOfWeek();
+      return var3 == DayOfWeek.SATURDAY || var3 == DayOfWeek.SUNDAY;
+   }
+
+   private static boolean isValidTimeFormat(String var0) {
+      return var0.matches("\\d{2}:\\d{2}");
+   }
+
+   private static boolean isValidTimeRange(String var0) {
+      try {
+         int var1 = Integer.parseInt(var0.split(":")[0]);
+         return var1 >= 9 && var1 < 17;
+      } catch (NumberFormatException var2) {
+         return false;
+      }
+   }
+
+   private static boolean isTimeInPast(String var0, String var1) {
+      LocalDate var2 = LocalDate.parse(var0);
+      LocalTime var3 = LocalTime.parse(var1);
+      LocalDate var4 = LocalDate.now();
+      LocalTime var5 = LocalTime.now();
+      return var2.isBefore(var4) || var2.isEqual(var4) && var3.isBefore(var5);
+   }
+
+   private static int getLeastBusyDoctorFromDB(Connection var0, String var1, String var2, String var3) throws SQLException {
+      String var4 = "SELECT d.id AS doctor_id, COUNT(a.id) AS appointment_count\nFROM doctors d\nLEFT JOIN appointments a ON d.id = a.doctor_id AND a.date = ? AND a.time = ?\nWHERE d.specialty = ?\nGROUP BY d.id\nORDER BY appointment_count ASC\nLIMIT 1\n";
+      PreparedStatement var5 = var0.prepareStatement(var4);
+
+      int var7;
+      label69: {
+         try {
+            label70: {
+               var5.setString(1, var2);
+               var5.setString(2, var3);
+               var5.setString(3, var1);
+               ResultSet var6 = var5.executeQuery();
+
+               label71: {
+                  try {
+                     if (var6.next()) {
+                        var7 = var6.getInt("doctor_id");
+                        break label71;
+                     }
+                  } catch (Throwable var11) {
+                     if (var6 != null) {
+                        try {
+                           var6.close();
+                        } catch (Throwable var10) {
+                           var11.addSuppressed(var10);
+                        }
+                     }
+
+                     throw var11;
+                  }
+
+                  if (var6 != null) {
+                     var6.close();
+                  }
+                  break label70;
+               }
+
+               if (var6 != null) {
+                  var6.close();
+               }
+               break label69;
+            }
+         } catch (Throwable var12) {
+            if (var5 != null) {
+               try {
+                  var5.close();
+               } catch (Throwable var9) {
+                  var12.addSuppressed(var9);
+               }
+            }
+
+            throw var12;
+         }
+
+         if (var5 != null) {
+            var5.close();
+         }
+
+         return -1;
+      }
+
+      if (var5 != null) {
+         var5.close();
+      }
+
+      return var7;
+   }
+
+   private static boolean isDoctorAvailable(Connection var0, int var1, String var2, String var3) throws SQLException {
+      String var4 = "SELECT COUNT(*) AS appointment_count\nFROM appointments\nWHERE doctor_id = ? AND date = ? AND time = ?\n";
+      PreparedStatement var5 = var0.prepareStatement(var4);
+
+      boolean var7;
+      label74: {
+         try {
+            label75: {
+               var5.setInt(1, var1);
+               var5.setString(2, var2);
+               var5.setString(3, var3);
+               ResultSet var6 = var5.executeQuery();
+
+               label76: {
+                  try {
+                     if (var6.next()) {
+                        var7 = var6.getInt("appointment_count") == 0;
+                        break label76;
+                     }
+                  } catch (Throwable var11) {
+                     if (var6 != null) {
+                        try {
+                           var6.close();
+                        } catch (Throwable var10) {
+                           var11.addSuppressed(var10);
+                        }
+                     }
+
+                     throw var11;
+                  }
+
+                  if (var6 != null) {
+                     var6.close();
+                  }
+                  break label75;
+               }
+
+               if (var6 != null) {
+                  var6.close();
+               }
+               break label74;
+            }
+         } catch (Throwable var12) {
+            if (var5 != null) {
+               try {
+                  var5.close();
+               } catch (Throwable var9) {
+                  var12.addSuppressed(var9);
+               }
+            }
+
+            throw var12;
+         }
+
+         if (var5 != null) {
+            var5.close();
+         }
+
+         return false;
+      }
+
+      if (var5 != null) {
+         var5.close();
+      }
+
+      return var7;
+   }
+
+   private static void suggestAlternativeTimesFromDB(Connection var0, String var1, String var2, String var3, int var4) throws SQLException {
+      LocalDate var5;
+      for(var5 = LocalDate.parse(var2); var5.getDayOfWeek() == DayOfWeek.SATURDAY || var5.getDayOfWeek() == DayOfWeek.SUNDAY; var5 = var5.plusDays(1L)) {
+      }
+
+      while(true) {
+         String var6 = "WITH time_slots AS (\n    SELECT TIME '09:00' + INTERVAL (n) HOUR AS available_time\n    FROM (\n        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL\n        SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7\n    ) AS numbers\n),\nappointments_count AS (\n    SELECT\n        a.date,\n        a.time,\n        d.specialty,\n        COUNT(a.doctor_id) AS doctors_booked\n    FROM appointments a\n    JOIN doctors d ON a.doctor_id = d.id\n    WHERE a.date = ? AND d.specialty = ?\n    GROUP BY a.date, a.time, d.specialty\n)\nSELECT\n    ts.available_time\nFROM time_slots ts\nLEFT JOIN appointments_count ac\n    ON ts.available_time = ac.time\nWHERE (ac.doctors_booked IS NULL OR ac.doctors_booked < 3)\nORDER BY ts.available_time;\n";
+         PreparedStatement var7 = var0.prepareStatement(var6);
+
+         label165: {
+            label166: {
+               label151: {
+                  try {
+                     label167: {
+                        ResultSet var8;
+                        label168: {
+                           label169: {
+                              label170: {
+                                 var7.setString(1, var5.toString());
+                                 var7.setString(2, var1);
+                                 var8 = var7.executeQuery();
+
+                                 try {
+                                    ArrayList var9 = new ArrayList();
+                                    LocalTime var10 = LocalTime.now();
+                                    boolean var11 = var5.equals(LocalDate.now());
+
+                                    label142:
+                                    while(true) {
+                                       LocalTime var12;
+                                       do {
+                                          if (!var8.next()) {
+                                             if (var9.isEmpty()) {
+                                                break label168;
+                                             }
+
+                                             Object[] var20 = new Object[]{"\u039a\u03bb\u03b5\u03af\u03c3\u03b9\u03bc\u03bf \u03a0\u03b1\u03c1\u03b1\u03b8\u03cd\u03c1\u03bf\u03c5", "\u0395\u03c0\u03cc\u03bc\u03b5\u03bd\u03b7 \u0397\u03bc\u03ad\u03c1\u03b1", "\u0395\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae \u038f\u03c1\u03b1\u03c2"};
+                                             StringBuilder var21 = new StringBuilder("\u0394\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b5\u03c2 \u03ce\u03c1\u03b5\u03c2 \u03b3\u03b9\u03b1 \u03c4\u03b7\u03bd " + String.valueOf(var5) + ":\n");
+
+                                             int var14;
+                                             for(var14 = 0; var14 < var9.size(); ++var14) {
+                                                var21.append(var14 + 1).append(". ").append((String)var9.get(var14)).append("\n");
+                                             }
+
+                                             var14 = JOptionPane.showOptionDialog((Component)null, var21.toString(), "\u0394\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b5\u03c2 \u038f\u03c1\u03b5\u03c2", -1, 1, (Icon)null, var20, var20[2]);
+                                             if (var14 == 0) {
+                                                break label170;
+                                             }
+
+                                             if (var14 != 1) {
+                                                if (var14 != 2) {
+                                                   break label168;
+                                                }
+
+                                                String var15 = (String)JOptionPane.showInputDialog((Component)null, "\u0395\u03c0\u03b9\u03bb\u03ad\u03be\u03c4\u03b5 \u03bc\u03af\u03b1 \u03ce\u03c1\u03b1:", "\u0395\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae \u038f\u03c1\u03b1\u03c2", 3, (Icon)null, var9.toArray(), var9.get(0));
+                                                if (var15 == null) {
+                                                   break label168;
+                                                }
+
+                                                addAppointment(var1, var5.toString(), var15, var4);
+                                                break label142;
+                                             }
+
+                                             while(true) {
+                                                do {
+                                                   var5 = var5.plusDays(1L);
+                                                } while(var5.getDayOfWeek() == DayOfWeek.SATURDAY);
+
+                                                if (var5.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                                                   break label169;
+                                                }
+                                             }
+                                          }
+
+                                          var12 = var8.getTime("available_time").toLocalTime();
+                                       } while(var11 && !var12.isAfter(var10));
+
+                                       String var13 = var12.toString();
+                                       var9.add(var13);
+                                    }
+                                 } catch (Throwable var18) {
+                                    if (var8 != null) {
+                                       try {
+                                          var8.close();
+                                       } catch (Throwable var17) {
+                                          var18.addSuppressed(var17);
+                                       }
+                                    }
+
+                                    throw var18;
+                                 }
+
+                                 if (var8 != null) {
+                                    var8.close();
+                                 }
+                                 break label151;
+                              }
+
+                              if (var8 != null) {
+                                 var8.close();
+                              }
+                              break label166;
+                           }
+
+                           if (var8 != null) {
+                              var8.close();
+                           }
+                           break label167;
+                        }
+
+                        if (var8 != null) {
+                           var8.close();
+                        }
+                        break label165;
+                     }
+                  } catch (Throwable var19) {
+                     if (var7 != null) {
+                        try {
+                           var7.close();
+                        } catch (Throwable var16) {
+                           var19.addSuppressed(var16);
+                        }
+                     }
+
+                     throw var19;
+                  }
+
+                  if (var7 != null) {
+                     var7.close();
+                  }
+                  continue;
+               }
+
+               if (var7 != null) {
+                  var7.close();
+               }
+
+               return;
+            }
+
+            if (var7 != null) {
+               var7.close();
+            }
+
+            return;
+         }
+
+         if (var7 != null) {
+            var7.close();
+         }
+
+         while(true) {
+            do {
+               var5 = var5.plusDays(1L);
+            } while(var5.getDayOfWeek() == DayOfWeek.SATURDAY);
+
+            if (var5.getDayOfWeek() != DayOfWeek.SUNDAY) {
+               break;
+            }
+         }
+      }
+   }
+
+   public static List<String> getAppointments(int var0) throws SQLException {
+      ArrayList var1 = new ArrayList();
+      String var2 = "SELECT a.id, a.date, a.time, d.name AS doctor, d.specialty\nFROM appointments a\nJOIN doctors d ON a.doctor_id = d.id\nWHERE a.user_id = ?\nORDER BY a.date, a.time\n";
+
+      try {
+         Connection var3 = DatabaseManager.getConnection();
+
+         try {
+            PreparedStatement var4 = var3.prepareStatement(var2);
+
+            try {
+               var4.setInt(1, var0);
+               ResultSet var5 = var4.executeQuery();
+
+               try {
+                  while(var5.next()) {
+                     var1.add(String.format("ID: %d, \u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1: %s, \u038f\u03c1\u03b1: %s, \u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2: %s, \u0395\u03b9\u03b4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1: %s", var5.getInt("id"), var5.getString("date"), var5.getString("time"), var5.getString("doctor"), var5.getString("specialty")));
+                  }
+               } catch (Throwable var11) {
+                  if (var5 != null) {
+                     try {
+                        var5.close();
+                     } catch (Throwable var10) {
+                        var11.addSuppressed(var10);
+                     }
+                  }
+
+                  throw var11;
+               }
+
+               if (var5 != null) {
+                  var5.close();
+               }
+            } catch (Throwable var12) {
+               if (var4 != null) {
+                  try {
+                     var4.close();
+                  } catch (Throwable var9) {
+                     var12.addSuppressed(var9);
+                  }
+               }
+
+               throw var12;
+            }
+
+            if (var4 != null) {
+               var4.close();
+            }
+         } catch (Throwable var13) {
+            if (var3 != null) {
+               try {
+                  var3.close();
+               } catch (Throwable var8) {
+                  var13.addSuppressed(var8);
+               }
+            }
+
+            throw var13;
+         }
+
+         if (var3 != null) {
+            var3.close();
+         }
+      } catch (SQLException var14) {
+         JOptionPane.showMessageDialog((Component)null, "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1 \u03ba\u03b1\u03c4\u03ac \u03c4\u03b7\u03bd \u03b1\u03bd\u03ac\u03ba\u03c4\u03b7\u03c3\u03b7 \u03c4\u03c9\u03bd \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd: " + var14.getMessage(), "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         var14.printStackTrace();
+      }
+
+      return var1;
+   }
+
+   private static boolean isAppointmentSlotAvailable(Connection var0, String var1, String var2, String var3) throws SQLException {
+      String var4 = "SELECT COUNT(*) AS appointment_count\nFROM appointments a\nJOIN doctors d ON a.doctor_id = d.id\nWHERE a.date = ? AND a.time = ? AND d.specialty = ?\n";
+      PreparedStatement var5 = var0.prepareStatement(var4);
+
+      boolean var8;
+      label74: {
+         try {
+            label75: {
+               var5.setString(1, var1);
+               var5.setString(2, var2);
+               var5.setString(3, var3);
+               ResultSet var6 = var5.executeQuery();
+
+               label76: {
+                  try {
+                     if (var6.next()) {
+                        int var7 = var6.getInt("appointment_count");
+                        var8 = var7 < 3;
+                        break label76;
+                     }
+                  } catch (Throwable var11) {
+                     if (var6 != null) {
+                        try {
+                           var6.close();
+                        } catch (Throwable var10) {
+                           var11.addSuppressed(var10);
+                        }
+                     }
+
+                     throw var11;
+                  }
+
+                  if (var6 != null) {
+                     var6.close();
+                  }
+                  break label75;
+               }
+
+               if (var6 != null) {
+                  var6.close();
+               }
+               break label74;
+            }
+         } catch (Throwable var12) {
+            if (var5 != null) {
+               try {
+                  var5.close();
+               } catch (Throwable var9) {
+                  var12.addSuppressed(var9);
+               }
+            }
+
+            throw var12;
+         }
+
+         if (var5 != null) {
+            var5.close();
+         }
+
+         return false;
+      }
+
+      if (var5 != null) {
+         var5.close();
+      }
+
+      return var8;
+   }
+
+   public static void deleteAppointment(int var0) {
+      String var1 = "DELETE FROM appointments WHERE id = ?";
+
+      try {
+         Connection var2 = DatabaseManager.getConnection();
+
+         try {
+            PreparedStatement var3 = var2.prepareStatement(var1);
+
+            try {
+               var3.setInt(1, var0);
+               var3.executeUpdate();
+               JOptionPane.showMessageDialog((Component)null, "\u03a4\u03bf \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd \u03b4\u03b9\u03b1\u03b3\u03c1\u03ac\u03c6\u03b7\u03ba\u03b5 \u03bc\u03b5 \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1.", "\u0395\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1", 1);
+            } catch (Throwable var8) {
+               if (var3 != null) {
+                  try {
+                     var3.close();
+                  } catch (Throwable var7) {
+                     var8.addSuppressed(var7);
+                  }
+               }
+
+               throw var8;
+            }
+
+            if (var3 != null) {
+               var3.close();
+            }
+         } catch (Throwable var9) {
+            if (var2 != null) {
+               try {
+                  var2.close();
+               } catch (Throwable var6) {
+                  var9.addSuppressed(var6);
+               }
+            }
+
+            throw var9;
+         }
+
+         if (var2 != null) {
+            var2.close();
+         }
+      } catch (SQLException var10) {
+         JOptionPane.showMessageDialog((Component)null, "\u0391\u03c0\u03bf\u03c4\u03c5\u03c7\u03af\u03b1 \u03ba\u03b1\u03c4\u03ac \u03c4\u03b7 \u03b4\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03c4\u03bf\u03c5 \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd: " + var10.getMessage(), "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         var10.printStackTrace();
+      }
+
+   }
+}
+
