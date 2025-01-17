@@ -26,7 +26,9 @@ public class Doctor {
     public String getSpeciality() {
         return "General"; 
     }
-
+    public void setSpecialty(String Specialty) {
+    this.specialty = specialty;
+    }
     @Override
     public String toString() {
         return "Doctor{" +
