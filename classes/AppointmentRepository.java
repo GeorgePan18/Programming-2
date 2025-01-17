@@ -65,9 +65,4 @@ public class AppointmentRepository {
         return null;
     }
 
-    private void markSlotAsBooked(int doctorId, LocalDateTime slot) {
-        String sql = "UPDATE DoctorTimetable SET IsAvailable = FALSE WHERE DoctorID = ? AND Slot = ?";
-
-
-    
-}
+   
