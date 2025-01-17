@@ -16,20 +16,24 @@
   <name>HealthSync</name>
   <description>Appointment scheduler for clinic</description>
 
-  <!-- Ρυθμίσεις Maven -->
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!--  Ορίζει την κωδικοποίηση των πηγών σε UTF-8.  -->
+    <maven.compiler.source>23</maven.compiler.source>
+    <maven.compiler.target>23</maven.compiler.target>
+    <!--  Ορίζει την έκδοση Java που χρησιμοποιείται για τη μεταγλώττιση (Java 22).  -->
+    <exec.mainClass>com.mycompany.healthsync.HealthSync</exec.mainClass>
+    <!--  Ορίζει την κύρια κλάση που θα εκτελεστεί από την εφαρμογή.  -->
   </properties>
 
   <!-- Εξαρτήσεις -->
   <dependencies>
     <!-- MySQL Connector -->
-   <dependency>
-    <groupId>com.mysql</groupId>
-    <artifactId>mysql-connector-j</artifactId>
-    <version>9.1.0</version>
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>8.0.33</version>
+  <!--  Προσθέτει τον σύνδεσμο (connector) της MySQL για επικοινωνία με τη βάση δεδομένων.  -->
 </dependency>
 
 
