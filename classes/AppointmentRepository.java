@@ -68,14 +68,6 @@ public class AppointmentRepository {
     private void markSlotAsBooked(int doctorId, LocalDateTime slot) {
         String sql = "UPDATE DoctorTimetable SET IsAvailable = FALSE WHERE DoctorID = ? AND Slot = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, doctorId);
-            stmt.setTimestamp(2, Timestamp.valueOf(slot));
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
