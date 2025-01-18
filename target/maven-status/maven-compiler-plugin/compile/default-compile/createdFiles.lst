@@ -1,1 +1,5 @@
-
+com\mycompany\healthsync\HealthSync.class
+com\mycompany\healthsync\AppointmentManager.class
+com\mycompany\healthsync\DatabaseManager.class
+com\mycompany\healthsync\DoctorManager.class
+com\mycompany\healthsync\UserManager.class
