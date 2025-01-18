@@ -1,0 +1,49 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.mycompany.healthsync;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseManager {
+   private static final String URL = "jdbc:mysql://localhost:3306/HealthSyncDB";
+   private static final String USERNAME = "root";
+   private static final String PASSWORD = "Nick2004";
+
+   public DatabaseManager() {
+   }
+
+   public static Connection getConnection() throws SQLException {
+      return DriverManager.getConnection("jdbc:mysql://localhost:3306/HealthSyncDB", "root", "Nick2004");
+   }
+
+   public static void setupDatabase() {
+      try {
+         Connection conn = getConnection();
+
+         try {
+            conn.createStatement().execute("    CREATE TABLE IF NOT EXISTS users (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        username VARCHAR(50) UNIQUE NOT NULL,\n        password VARCHAR(50) NOT NULL\n    )\n");
+            conn.createStatement().execute("    CREATE TABLE IF NOT EXISTS doctors (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        name VARCHAR(50) NOT NULL,\n        specialty VARCHAR(50) NOT NULL\n    )\n");
+            conn.createStatement().execute("    CREATE TABLE IF NOT EXISTS appointments (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        user_id INT NOT NULL,\n        doctor_id INT NOT NULL,\n        date DATE NOT NULL,\n        time TIME NOT NULL,\n        FOREIGN KEY (user_id) REFERENCES users(id),\n        FOREIGN KEY (doctor_id) REFERENCES doctors(id)\n    )\n");
+            DoctorManager.initializeDoctors();
+         } catch (Throwable var4) {
+            if (conn != null) {
+               try {
+                  conn.close();
+               } catch (Throwable var3) {
+                  var4.addSuppressed(var3);
+               }
+            }
+
+            throw var4;
+         }
+
+         if (conn != null) {
+            conn.close();
+         }
+      } catch (SQLException var5) {
+         var5.printStackTrace();
+      }
+
+   }
+}
