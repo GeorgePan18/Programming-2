@@ -1,0 +1,202 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.mycompany.healthsync;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserManager {
+   public UserManager() {
+   }
+
+   public static boolean registerUser(String username, String password) {
+      String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+      try {
+         Connection conn = DatabaseManager.getConnection();
+
+         boolean var5;
+         try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            try {
+               stmt.setString(1, username);
+               stmt.setString(2, password);
+               stmt.executeUpdate();
+               var5 = true;
+            } catch (Throwable var9) {
+               if (stmt != null) {
+                  try {
+                     stmt.close();
+                  } catch (Throwable var8) {
+                     var9.addSuppressed(var8);
+                  }
+               }
+
+               throw var9;
+            }
+
+            if (stmt != null) {
+               stmt.close();
+            }
+         } catch (Throwable var10) {
+            if (conn != null) {
+               try {
+                  conn.close();
+               } catch (Throwable var7) {
+                  var10.addSuppressed(var7);
+               }
+            }
+
+            throw var10;
+         }
+
+         if (conn != null) {
+            conn.close();
+         }
+
+         return var5;
+      } catch (SQLException var11) {
+         var11.printStackTrace();
+         return false;
+      }
+   }
+
+   public static boolean authenticateUser(String username, String password) {
+      String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+      try {
+         Connection conn = DatabaseManager.getConnection();
+
+         boolean var6;
+         try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            try {
+               stmt.setString(1, username);
+               stmt.setString(2, password);
+               ResultSet rs = stmt.executeQuery();
+
+               try {
+                  var6 = rs.next();
+               } catch (Throwable var11) {
+                  if (rs != null) {
+                     try {
+                        rs.close();
+                     } catch (Throwable var10) {
+                        var11.addSuppressed(var10);
+                     }
+                  }
+
+                  throw var11;
+               }
+
+               if (rs != null) {
+                  rs.close();
+               }
+            } catch (Throwable var12) {
+               if (stmt != null) {
+                  try {
+                     stmt.close();
+                  } catch (Throwable var9) {
+                     var12.addSuppressed(var9);
+                  }
+               }
+
+               throw var12;
+            }
+
+            if (stmt != null) {
+               stmt.close();
+            }
+         } catch (Throwable var13) {
+            if (conn != null) {
+               try {
+                  conn.close();
+               } catch (Throwable var8) {
+                  var13.addSuppressed(var8);
+               }
+            }
+
+            throw var13;
+         }
+
+         if (conn != null) {
+            conn.close();
+         }
+
+         return var6;
+      } catch (SQLException var14) {
+         var14.printStackTrace();
+         return false;
+      }
+   }
+
+   public static int getUserId(String username) throws SQLException {
+      String query = "SELECT id FROM users WHERE username = ?";
+      Connection conn = DatabaseManager.getConnection();
+
+      int var5;
+      try {
+         PreparedStatement stmt = conn.prepareStatement(query);
+
+         try {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            try {
+               if (!rs.next()) {
+                  throw new SQLException("User not found.");
+               }
+
+               var5 = rs.getInt("id");
+            } catch (Throwable var10) {
+               if (rs != null) {
+                  try {
+                     rs.close();
+                  } catch (Throwable var9) {
+                     var10.addSuppressed(var9);
+                  }
+               }
+
+               throw var10;
+            }
+
+            if (rs != null) {
+               rs.close();
+            }
+         } catch (Throwable var11) {
+            if (stmt != null) {
+               try {
+                  stmt.close();
+               } catch (Throwable var8) {
+                  var11.addSuppressed(var8);
+               }
+            }
+
+            throw var11;
+         }
+
+         if (stmt != null) {
+            stmt.close();
+         }
+      } catch (Throwable var12) {
+         if (conn != null) {
+            try {
+               conn.close();
+            } catch (Throwable var7) {
+               var12.addSuppressed(var7);
+            }
+         }
+
+         throw var12;
+      }
+
+      if (conn != null) {
+         conn.close();
+      }
+
+      return var5;
+   }
+}
