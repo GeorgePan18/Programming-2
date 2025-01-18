@@ -1,0 +1,69 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.mycompany.healthsync;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class DoctorManager {
+   public DoctorManager() {
+   }
+
+   public static void initializeDoctors() {
+      String[][] doctors = new String[][]{{"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 1", "\u039a\u03b1\u03c1\u03b4\u03b9\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 2", "\u039a\u03b1\u03c1\u03b4\u03b9\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 3", "\u039a\u03b1\u03c1\u03b4\u03b9\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 4", "\u039d\u03b5\u03c5\u03c1\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 5", "\u039d\u03b5\u03c5\u03c1\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 6", "\u039d\u03b5\u03c5\u03c1\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 7", "\u03a0\u03b1\u03b9\u03b4\u03af\u03b1\u03c4\u03c1\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 8", "\u03a0\u03b1\u03b9\u03b4\u03af\u03b1\u03c4\u03c1\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 9", "\u03a0\u03b1\u03b9\u03b4\u03af\u03b1\u03c4\u03c1\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 10", "\u039f\u03c1\u03b8\u03bf\u03c0\u03b5\u03b4\u03b9\u03ba\u03cc\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 11", "\u039f\u03c1\u03b8\u03bf\u03c0\u03b5\u03b4\u03b9\u03ba\u03cc\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 12", "\u039f\u03c1\u03b8\u03bf\u03c0\u03b5\u03b4\u03b9\u03ba\u03cc\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 13", "\u0393\u03c5\u03bd\u03b1\u03b9\u03ba\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 14", "\u0393\u03c5\u03bd\u03b1\u03b9\u03ba\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}, {"\u0393\u03b9\u03b1\u03c4\u03c1\u03cc\u03c2 15", "\u0393\u03c5\u03bd\u03b1\u03b9\u03ba\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"}};
+      String query = "INSERT IGNORE INTO doctors (name, specialty) VALUES (?, ?)";
+
+      try {
+         Connection conn = DatabaseManager.getConnection();
+
+         try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            try {
+               String[][] var4 = doctors;
+               int var5 = doctors.length;
+
+               for(int var6 = 0; var6 < var5; ++var6) {
+                  String[] doctor = var4[var6];
+                  stmt.setString(1, doctor[0]);
+                  stmt.setString(2, doctor[1]);
+                  stmt.addBatch();
+               }
+
+               stmt.executeBatch();
+            } catch (Throwable var10) {
+               if (stmt != null) {
+                  try {
+                     stmt.close();
+                  } catch (Throwable var9) {
+                     var10.addSuppressed(var9);
+                  }
+               }
+
+               throw var10;
+            }
+
+            if (stmt != null) {
+               stmt.close();
+            }
+         } catch (Throwable var11) {
+            if (conn != null) {
+               try {
+                  conn.close();
+               } catch (Throwable var8) {
+                  var11.addSuppressed(var8);
+               }
+            }
+
+            throw var11;
+         }
+
+         if (conn != null) {
+            conn.close();
+         }
+      } catch (SQLException var12) {
+         var12.printStackTrace();
+      }
+
+   }
+}
