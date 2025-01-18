@@ -415,4 +415,4 @@ java -jar target/HealthSync-1.0-SNAPSHOT-shaded.jar
 ---
 
 # UML DIAGRAM
-[View UML Diagram](https://drive.google.com/file/d/1JsVAf4zzTBa1xt9onBuABBI-qdew-vko/view?usp=sharing) 
+[View UML Diagram](https://1drv.ms/i/s!Aq0TCysqPJX_gtV8BwHUMrb2xEM6fA?e=sybc6C) 
