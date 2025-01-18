@@ -1,0 +1,221 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package com.mycompany.healthsync;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+public class HealthSync extends JFrame {
+   public HealthSync() {
+      DatabaseManager.setupDatabase();
+      this.loginScreen();
+   }
+
+   private void loginScreen() {
+      JFrame loginFrame = new JFrame("\u03a3\u03cd\u03bd\u03b4\u03b5\u03c3\u03b7 \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7");
+      loginFrame.setSize(400, 200);
+      loginFrame.setDefaultCloseOperation(3);
+      loginFrame.setLayout(new GridLayout(3, 2, 10, 10));
+      JLabel usernameLabel = new JLabel("\u038c\u03bd\u03bf\u03bc\u03b1 \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7:");
+      JTextField usernameField = new JTextField();
+      JLabel passwordLabel = new JLabel("\u039a\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2:");
+      JPasswordField passwordField = new JPasswordField();
+      JButton loginButton = new JButton("\u03a3\u03cd\u03bd\u03b4\u03b5\u03c3\u03b7");
+      JButton registerButton = new JButton("\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae");
+      loginFrame.add(usernameLabel);
+      loginFrame.add(usernameField);
+      loginFrame.add(passwordLabel);
+      loginFrame.add(passwordField);
+      loginFrame.add(loginButton);
+      loginFrame.add(registerButton);
+      loginFrame.setVisible(true);
+      loginButton.addActionListener((e) -> {
+         String username = usernameField.getText();
+         String password = new String(passwordField.getPassword());
+         if (UserManager.authenticateUser(username, password)) {
+            loginFrame.dispose();
+            this.mainMenu(username);
+         } else {
+            JOptionPane.showMessageDialog(loginFrame, "\u039b\u03ac\u03b8\u03bf\u03c2 \u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af\u03b1 \u03c3\u03cd\u03bd\u03b4\u03b5\u03c3\u03b7\u03c2.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         }
+
+      });
+      registerButton.addActionListener((e) -> {
+         this.openRegisterWindow();
+      });
+   }
+
+   private void openRegisterWindow() {
+      JFrame registerFrame = new JFrame("\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7");
+      registerFrame.setSize(400, 300);
+      registerFrame.setLayout(new GridLayout(4, 2, 10, 10));
+      JLabel usernameLabel = new JLabel("\u038c\u03bd\u03bf\u03bc\u03b1 \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7:");
+      JTextField usernameField = new JTextField();
+      JLabel passwordLabel = new JLabel("\u039a\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2:");
+      JPasswordField passwordField = new JPasswordField();
+      JLabel confirmPasswordLabel = new JLabel("\u0395\u03c0\u03b9\u03b2\u03b5\u03b2\u03b1\u03af\u03c9\u03c3\u03b7 \u039a\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd:");
+      JPasswordField confirmPasswordField = new JPasswordField();
+      JButton submitButton = new JButton("\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae");
+      JButton cancelButton = new JButton("\u0391\u03ba\u03cd\u03c1\u03c9\u03c3\u03b7");
+      registerFrame.add(usernameLabel);
+      registerFrame.add(usernameField);
+      registerFrame.add(passwordLabel);
+      registerFrame.add(passwordField);
+      registerFrame.add(confirmPasswordLabel);
+      registerFrame.add(confirmPasswordField);
+      registerFrame.add(submitButton);
+      registerFrame.add(cancelButton);
+      registerFrame.setVisible(true);
+      submitButton.addActionListener((e) -> {
+         String username = usernameField.getText();
+         String password = new String(passwordField.getPassword());
+         String confirmPassword = new String(confirmPasswordField.getPassword());
+         if (password.equals(confirmPassword)) {
+            if (UserManager.registerUser(username, password)) {
+               JOptionPane.showMessageDialog(registerFrame, "\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae \u03bf\u03bb\u03bf\u03ba\u03bb\u03b7\u03c1\u03ce\u03b8\u03b7\u03ba\u03b5 \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03ce\u03c2!", "\u0395\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1", 1);
+               registerFrame.dispose();
+            } else {
+               JOptionPane.showMessageDialog(registerFrame, "\u0397 \u03b5\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae \u03b1\u03c0\u03ad\u03c4\u03c5\u03c7\u03b5. \u0394\u03bf\u03ba\u03b9\u03bc\u03ac\u03c3\u03c4\u03b5 \u03be\u03b1\u03bd\u03ac.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+            }
+         } else {
+            JOptionPane.showMessageDialog(registerFrame, "\u039f\u03b9 \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03af \u03b4\u03b5\u03bd \u03c4\u03b1\u03b9\u03c1\u03b9\u03ac\u03b6\u03bf\u03c5\u03bd.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         }
+
+      });
+      cancelButton.addActionListener((e) -> {
+         registerFrame.dispose();
+      });
+   }
+
+   private void mainMenu(String username) {
+      this.setTitle("HealthSync");
+      this.setSize(600, 400);
+      this.setDefaultCloseOperation(3);
+      this.setLayout(new BorderLayout());
+      JLabel welcomeLabel = new JLabel("\u039a\u03b1\u03bb\u03ce\u03c2 \u03ae\u03c1\u03b8\u03b1\u03c4\u03b5, " + username + "!", 0);
+      welcomeLabel.setFont(new Font("Arial", 1, 18));
+      this.add(welcomeLabel, "North");
+      JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+      JButton scheduleButton = new JButton("\u03a0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2 \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+      JButton viewButton = new JButton("\u03a0\u03c1\u03bf\u03b2\u03bf\u03bb\u03ae \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+      JButton exitButton = new JButton("\u0388\u03be\u03bf\u03b4\u03bf\u03c2");
+      buttonPanel.add(scheduleButton);
+      buttonPanel.add(viewButton);
+      buttonPanel.add(exitButton);
+      this.add(buttonPanel, "Center");
+      scheduleButton.addActionListener((e) -> {
+         this.openScheduleWindow(username);
+      });
+      viewButton.addActionListener((e) -> {
+         this.viewAppointments(username);
+      });
+      exitButton.addActionListener((e) -> {
+         System.exit(0);
+      });
+      this.setVisible(true);
+   }
+
+   private void openScheduleWindow(String username) {
+      JFrame scheduleFrame = new JFrame("\u03a0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2 \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+      scheduleFrame.setSize(400, 300);
+      scheduleFrame.setLayout(new GridLayout(6, 2, 10, 10));
+      JLabel specialtyLabel = new JLabel("\u0395\u03b9\u03b4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1:");
+      JComboBox<String> specialtyComboBox = new JComboBox(new String[]{"\u039a\u03b1\u03c1\u03b4\u03b9\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2", "\u039d\u03b5\u03c5\u03c1\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2", "\u03a0\u03b1\u03b9\u03b4\u03af\u03b1\u03c4\u03c1\u03bf\u03c2", "\u039f\u03c1\u03b8\u03bf\u03c0\u03b5\u03b4\u03b9\u03ba\u03cc\u03c2", "\u0393\u03c5\u03bd\u03b1\u03b9\u03ba\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2"});
+      JLabel dateLabel = new JLabel("\u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1:");
+      JTextField dateField = new JTextField("2025-01-17");
+      JLabel timeLabel = new JLabel("\u038f\u03c1\u03b1:");
+      JTextField timeField = new JTextField("10:00");
+      JButton submitButton = new JButton("\u039a\u03bb\u03b5\u03af\u03c3\u03b5 \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+      JButton cancelButton = new JButton("\u0391\u03ba\u03cd\u03c1\u03c9\u03c3\u03b7");
+      scheduleFrame.add(specialtyLabel);
+      scheduleFrame.add(specialtyComboBox);
+      scheduleFrame.add(dateLabel);
+      scheduleFrame.add(dateField);
+      scheduleFrame.add(timeLabel);
+      scheduleFrame.add(timeField);
+      scheduleFrame.add(submitButton);
+      scheduleFrame.add(cancelButton);
+      scheduleFrame.setVisible(true);
+      submitButton.addActionListener((e) -> {
+         String specialty = (String)specialtyComboBox.getSelectedItem();
+         String date = dateField.getText();
+         String time = timeField.getText();
+         if (!time.matches("\\d{2}:\\d{2}")) {
+            JOptionPane.showMessageDialog(scheduleFrame, "\u0397 \u03ce\u03c1\u03b1 \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c3\u03b5 \u03bc\u03bf\u03c1\u03c6\u03ae HH:MM.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+         } else {
+            try {
+               int userId = UserManager.getUserId(username);
+               AppointmentManager.addAppointment(specialty, date, time, userId);
+               scheduleFrame.dispose();
+            } catch (SQLException var10) {
+               JOptionPane.showMessageDialog(scheduleFrame, "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1 \u03ba\u03b1\u03c4\u03ac \u03c4\u03b7\u03bd \u03c0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03cc \u03c4\u03bf\u03c5 \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd.", "\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1", 0);
+               var10.printStackTrace();
+            }
+
+         }
+      });
+      cancelButton.addActionListener((e) -> {
+         scheduleFrame.dispose();
+      });
+   }
+
+   private void viewAppointments(String username) {
+      JFrame viewFrame = new JFrame("\u03a0\u03c1\u03bf\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03ad\u03bd\u03b1 \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+      viewFrame.setSize(600, 400);
+      viewFrame.setLayout(new BorderLayout());
+      JTextArea appointmentsArea = new JTextArea();
+      appointmentsArea.setEditable(false);
+      DefaultListModel<String> listModel = new DefaultListModel();
+      JList<String> appointmentList = new JList(listModel);
+      JScrollPane scrollPane = new JScrollPane(appointmentList);
+      JButton deleteButton = new JButton("\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03a1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd");
+
+      try {
+         int userId = UserManager.getUserId(username);
+         List<String> appointments = AppointmentManager.getAppointments(userId);
+         Objects.requireNonNull(listModel);
+         appointments.forEach(listModel::addElement);
+      } catch (SQLException var10) {
+         listModel.addElement("\u0391\u03c0\u03bf\u03c4\u03c5\u03c7\u03af\u03b1 \u03ba\u03b1\u03c4\u03ac \u03c4\u03b7\u03bd \u03b1\u03bd\u03ac\u03ba\u03c4\u03b7\u03c3\u03b7 \u03c4\u03c9\u03bd \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd.");
+         var10.printStackTrace();
+      }
+
+      deleteButton.addActionListener((e) -> {
+         int selectedIndex = appointmentList.getSelectedIndex();
+         if (selectedIndex != -1) {
+            String selectedAppointment = (String)listModel.get(selectedIndex);
+            int appointmentId = Integer.parseInt(selectedAppointment.split(",")[0].split(":")[1].trim());
+            AppointmentManager.deleteAppointment(appointmentId);
+            listModel.remove(selectedIndex);
+         } else {
+            JOptionPane.showMessageDialog(viewFrame, "\u03a0\u03b1\u03c1\u03b1\u03ba\u03b1\u03bb\u03ce \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03c4\u03b5 \u03ad\u03bd\u03b1 \u03c1\u03b1\u03bd\u03c4\u03b5\u03b2\u03bf\u03cd \u03b3\u03b9\u03b1 \u03b4\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae.", "\u03a0\u03c1\u03bf\u03c3\u03bf\u03c7\u03ae", 2);
+         }
+
+      });
+      JPanel buttonPanel = new JPanel();
+      buttonPanel.add(deleteButton);
+      viewFrame.add(scrollPane, "Center");
+      viewFrame.add(buttonPanel, "South");
+      viewFrame.setVisible(true);
+   }
+
+   public static void main(String[] args) {
+      SwingUtilities.invokeLater(HealthSync::new);
+   }
+}
